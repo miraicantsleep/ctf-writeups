@@ -8,7 +8,7 @@ This is a really weird text file [TXT](https://jupiter.challenges.picoctf.org/st
 2. Make sure to submit the flag as picoCTF{XXXXX}
 
 ## Approach
-First i downloaded the file with `https://jupiter.challenges.picoctf.org/static/e7e5d188621ee705ceeb0452525412ef/flag.txt`
+First i downloaded the file with `wget https://jupiter.challenges.picoctf.org/static/e7e5d188621ee705ceeb0452525412ef/flag.txt`
 
 For forensics problems, i always have to make sure that the extensions of the file is the actual format of the file. In this case, the file extensions DOES NOT MATCH the actual format of the file.
 
