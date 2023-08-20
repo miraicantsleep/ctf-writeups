@@ -21,7 +21,9 @@ This is a PNG file hidden as a txt file.
 So to solve it, i just changed the file extension type and hence, the flag.
 
 ## Flag
-<img width="849" alt="flag" src="https://github.com/miraicantsleep/ctf-writeups/assets/29684003/76aa3bc9-5974-4e27-8046-de9a1b414e81">
 ```
 picoCTF{now_you_know_about_extensions}
 ```
+
+<img width="849" alt="flag" src="https://github.com/miraicantsleep/ctf-writeups/assets/29684003/76aa3bc9-5974-4e27-8046-de9a1b414e81">
+
