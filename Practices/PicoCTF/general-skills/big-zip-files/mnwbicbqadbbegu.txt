@@ -1,1 +1,0 @@
-issue called the brachistochrone problem, specifying the curve connecting two points

@@ -1,1 +1,0 @@
-connects two vertices. If we count up all the vertices, rV, we will similarly have counted
