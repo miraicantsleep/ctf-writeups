@@ -1,1 +1,0 @@
-strand of RNA with either a linear or a closed circular geometry. Viroids can be so small

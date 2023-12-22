@@ -1,1 +1,0 @@
-We can imagine generating a cube in the following way: Take a line segment of a

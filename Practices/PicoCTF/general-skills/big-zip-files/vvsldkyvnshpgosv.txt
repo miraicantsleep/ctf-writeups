@@ -1,1 +1,0 @@
-number of corners or vertices V of a regular solid:
