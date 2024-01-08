@@ -1,9 +1,2 @@
 # ctf-writeups
-Gemastik winner wannabe
-
-## CTFs competitions
-
-|  Competition      |      Date       |    Link   |
-| -------------     | --------------- | --------- |
-| Compfest UI 2024  | To-be-announced |           |
-| JOINTS UGM 2024   | To-be-announced |           |
+A few of my solve script and write-ups for some CTFs that i've been playing. Mostly pwn challenges.
