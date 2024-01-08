@@ -1,2 +1,2 @@
 # ctf-writeups
-A few of my solve script and write-ups for some CTFs that i've been playing. Mostly pwn challenges.
+A few of my solve script and write-ups for some CTFs that i've been playing.
