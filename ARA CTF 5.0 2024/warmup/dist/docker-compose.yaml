@@ -1,0 +1,19 @@
+version: "3"
+services:
+  nginx:
+    build: ./nginx
+    ports: 
+      - "1019:80"
+    networks:
+      - internal
+  php:
+    build: ./php
+    networks:
+      - internal
+  flag:
+    build: ./flag
+    networks:
+      - internal
+networks:
+  internal:
+    driver: bridge
