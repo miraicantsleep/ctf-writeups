@@ -1,5 +1,6 @@
-FROM debian:latest # <--- CHANGE THIS ACCORDING TO THE DOCKERFILE IN CTF
+FROM debian:latest
 
+# CHANGE VERSION ACCORDING TO THE DOCKERFILE IN CTF
 #https://wiki.ubuntu.com/Releases
 
 ENV DEBIAN_FRONTEND noninteractive
