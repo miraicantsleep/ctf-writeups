@@ -6,7 +6,7 @@ from pwn import *
 # =========================================================
 exe = './sus'
 elf = context.binary = ELF(exe, checksec=True)
-libc = '/usr/lib/libc.so.6'
+libc = '/lib/x86_64-linux-gnu/libc.so.6'
 libc = ELF(libc, checksec=True)
 context.log_level = 'debug'
 host, port = 'chall.lac.tf', 31284
