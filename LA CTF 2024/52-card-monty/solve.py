@@ -6,9 +6,10 @@ from pwn import *
 # =========================================================
 exe = './monty'
 elf = context.binary = ELF(exe, checksec=True)
-libc = '/usr/lib/libc.so.6'
-libc = ELF(libc, checksec=False)
+# libc = '/usr/lib/libc.so.6'
+# libc = ELF(libc, checksec=False)
 context.log_level = 'debug'
+context.terminal = ['tmux', 'splitw', '-h']
 host, port = 'chall.lac.tf', 31132
 
 def initialize(argv=[]):
