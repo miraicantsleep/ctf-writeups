@@ -4,6 +4,8 @@ Usually playing as miraicantsleep, mirai, miraimiraimirai, sleepymirai etc.
 ## International Events
 | Name | Team | Rank | Year |
 | :---: | :---: | :---: | :---: |
+| HTB Cyber Apocalypse CTF 2024 | 92 | 2024 |
+| WxM CTF 2024 | HCS | 11 | 2024 |
 | osu!gaming CTF 2024 | HCS | 79 | 2024 |
 | LA CTF 2024 | miraimiraimirai (solo) | - | 2024 |
 | BITSCTF 2024 | HCS | 6 | 2024 |
