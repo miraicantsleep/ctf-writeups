@@ -9,7 +9,7 @@ elf = context.binary = ELF(exe, checksec=True)
 libc = '/lib/x86_64-linux-gnu/libc.so.6'
 # libc = '/usr/lib/libc.so.6'
 libc = ELF(libc, checksec=False)
-context.log_level = 'info'
+context.log_level = 'debug'
 context.terminal = ["tmux", "splitw", "-h"]
 host, port = 'challs.actf.co', 31312 # <-- change this
 

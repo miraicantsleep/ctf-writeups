@@ -1,6 +1,6 @@
 from pwn import *
 
-io = remote('titan.picoctf.net', 56996)
+io = remote('titan.picoctf.net', 51798)
 
 io.recvuntil(b'Word: ')
 word = io.recvline().strip().decode()
