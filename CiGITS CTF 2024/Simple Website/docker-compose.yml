@@ -1,0 +1,12 @@
+version: "3.8"
+
+services:
+  app:
+    container_name: simple_website_app
+    build: .
+    ports:
+      - "5000:5000"
+    restart: unless-stopped
+    environment:
+      - DEBUG=False
+      - SECRET_KEY=rock # NOTE: please change this later

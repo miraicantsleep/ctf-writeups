@@ -6,8 +6,6 @@ from pwn import *
 # =========================================================
 exe = './eep' # <-- change this
 elf = context.binary = ELF(exe, checksec=True)
-# libc = '/usr/lib/libc.so.6'
-# libc = ELF(libc, checksec=False)
 context.log_level = 'debug'
 context.terminal = ["tmux", "splitw", "-h"]
 host, port = '139.59.120.240', 13370 # <-- change this
@@ -22,14 +20,6 @@ def initialize(argv=[]):
 
 gdbscript = '''
 init-pwndbg
-# # break *main
-# break *add_target
-# break *add_target+337
-# # break *del_target
-# break *del_target+149
-# break *del_target+171
-# break print_target
-# break print_target_content
 '''.format(**locals())
 
 
