@@ -1,0 +1,1 @@
+{"name":"Local: poc","url":"/mnt/d/ctf-writeups/UIUCTF 2024/Syscalls/poc.c","tests":[{"id":1719654308794,"input":"","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/mnt/d/ctf-writeups/UIUCTF 2024/Syscalls/poc.c","group":"local","local":true}

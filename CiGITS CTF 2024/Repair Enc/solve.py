@@ -14,8 +14,8 @@ def getprimes(x):
 
 
 def main():
-    url = "http://139.59.120.240:11171/encrypt"
-    # url = "http://127.0.0.1:5000/encrypt"
+    # url = "http://139.59.120.240:11171/encrypt"
+    url = "http://127.0.0.1:5000/encrypt"
 
     plaintext = open("/dev/urandom", "rb").read(16).hex()
     data = {"plaintext": plaintext}

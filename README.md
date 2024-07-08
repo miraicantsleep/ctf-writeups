@@ -19,6 +19,6 @@ Usually playing as miraicantsleep, mirai, miraimiraimirai, sleepymirai etc.
 | Name | Team | Rank | Year |
 | :---: | :---: | :---: | :---: |
 | ARA 5.0 CTF 2024 | huohuohuo | 40* | 2024 |
-| FindIT CTF 2024 | Asdos ft Praktikan | *18 | 2024 |
+| FindIT CTF 2024 | Asdos ft Praktikan | 16 | 2024 |
 
 **As of scoreboard freezes**
