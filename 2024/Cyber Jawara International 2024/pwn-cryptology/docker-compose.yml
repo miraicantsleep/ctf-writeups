@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  cyberjawara:
+    container_name: cryptology 
+    restart: always
+    build:
+      context: .
+    ports:
+      - "10020:1337" # exposed:local
+    read_only: false

@@ -1,0 +1,30 @@
+import math
+
+# Given values
+x = "1794d818ccacc4a9138bc855ab25bd75d44ad0e3cf77c35a82c28c471b95581f0bc3e7662eaeab9edf9e81207e8eb9372fad80062cfe82a0033fa8429806814108759047a2dc4d99e455c87b398fb20a56508d2c80e2cda16c04000289fedfb54a65be856e3415fc3132ec31ae8e9a40487300b95214eb3a4671218e5cce8d062"
+n = "8a983ef1e619838d08cba93c9673d42053e1c32b3923b4454605976bed7bdad7ac24d95d9a096376b4ba5bbca69e2e6ebd545ec0530651ae1bccf291905dc55d48967a0178d75eb7ae5e81391450edebcb38099a66e443bc99ed5b12a1f0d5f71eec87b1f38000b5757780553b6ee67ab360ac5dc63e890abccf0ddd53d480f42cadc9d1f22a0557afef5c40e50736f254887bf90e4df4c24fb306c2a75788a7cc2dc55856e366f487c11026d7590bead023077333b224aedcba94b02b3f005994f6eadd3993157d11a0a7e6fae6352538eb0d51575994ba688ae1104917bca248de230f46872e2a494138a41af0ed196fbbf5cccb4fc134d10aaa9fd3d1f861"
+c = "47535db1842db1977ad889c1b3e158fc2f76fc18042c989d654524efa8263a468181745a72183470f30a1c747eae478edd58750c8f9e794b4bbba73f562844f7e0108067987065a4b926d8a4ffe8830e20b476c9f3d015046cf50a011f46a869314480bc242004c3952676547bee4b81819787f6386567bfdb73770776b3fdb338a2bcfb2a088efc7d2fa48e937ed4bc67253d9d1beeec661979d5c33a7ab1b3a055210dde7ecd3595f123042acc471f1c0e1a49db361993606ebfd3b1ff77c12bfdf93290272ff8c693556a5c919673a17b372cd281d7cc4628a16f0e829e04f8df545f4e84985d4afe03ddb9a5a4f13213b21a2a1efd6f1adcefb2c8c31968"
+
+# Convert hex strings to integers
+x = int(x, 16)
+n = int(n, 16)
+c = int(c, 16)
+
+# Solve for p and q
+discriminant = x*x - 4*n
+sqrt_discriminant = int(math.isqrt(discriminant))
+
+p = (x + sqrt_discriminant) // 2
+q = (x - sqrt_discriminant) // 2
+
+# Calculate m and d
+e = 65537
+m = math.lcm(p - 1, q - 1)
+d = pow(e, -1, m)
+
+# Decrypt the ciphertext
+FLAG = pow(c, d, n)
+
+# Convert FLAG from integer to bytes, then decode
+FLAG_bytes = FLAG.to_bytes((FLAG.bit_length() + 7) // 8, 'big')
+print(FLAG_bytes.decode())

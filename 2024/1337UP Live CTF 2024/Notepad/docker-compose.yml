@@ -1,0 +1,6 @@
+services:
+    pwn:
+        build: ./challenge
+        ports:
+            - 1341:1341
+        restart: always

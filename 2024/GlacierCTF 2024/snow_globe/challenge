@@ -1,0 +1,138 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Respect the shebang and mark file as executable
+
+import os
+import sys
+import random
+import subprocess
+import typing
+from flask import Flask, flash, redirect, render_template, request
+from waitress import serve
+from werkzeug.utils import secure_filename
+
+TMP_PATH = "/tmp/snow_globe"
+UPLOAD_PATH = f"{TMP_PATH}/uploads"
+INTERMEDIATE_PATH = f"{TMP_PATH}/intermediate_results"
+RESULTS_PATH = f"{TMP_PATH}/results"
+
+UID_OWN = os.getuid()
+GID_OWN = os.getgid()
+GID_EXTRACTOR = 1337
+GID_SNOWGLOBE = 1338
+
+IMAGE_SIZE=256
+
+
+def globe(job_id: str, upload_path: str) -> typing.Optional[str]:
+    rgb_file = os.path.join(INTERMEDIATE_PATH, f"{job_id}.rgb")
+    env_file = os.path.join(INTERMEDIATE_PATH, f"{job_id}.env")
+    out_file = os.path.join(INTERMEDIATE_PATH, f"{job_id}.webp")
+
+    def cleanup():
+        for el in [rgb_file, env_file, out_file]:
+            if os.path.exists(el):
+                os.remove(el)
+
+    # TODO: Split up the extractor and wrapper service into two separate containers!
+    code = subprocess.call(["/app/extractor", upload_path, rgb_file, env_file, str(IMAGE_SIZE)])
+    if code != 0:
+        cleanup()
+        return None
+
+    # TODO: Split up the extractor and wrapper service into two separate containers!
+    code = subprocess.call(["/app/globe_wrapper", rgb_file, env_file, out_file], stderr=subprocess.STDOUT)
+    if code != 0:
+        cleanup()
+        return None
+
+    return out_file
+
+def validate_globe(globe_path: str) -> bool:
+    try:
+        out = subprocess.check_output(["webpmux", "-info", globe_path])
+        print(out, flush=True)
+        out = out.splitlines()
+
+        assert out[1].startswith(b"Features present:")
+        assert b"animation" in out[1]
+        assert b"XMP" in out[1]
+
+        return True
+    except Exception as ex:
+        print(ex, flush=True)
+        return False
+
+
+
+def static_path(static_file: str) -> str:
+    return os.path.join(os.path.dirname(sys.argv[0]), "static", static_file)
+
+
+# create and configure the app
+app = Flask(__name__, instance_relative_config=True)
+app.config.from_mapping(
+    SECRET_KEY=random.randbytes(128)
+)
+app.config['MAX_CONTENT_LENGTH'] = 2 * 1024 * 1024
+# ensure the instance folder exists
+try:
+    os.makedirs(app.instance_path)
+except OSError:
+    pass
+
+@app.route('/')
+def index():
+    job_id = "".join(random.sample("abcdefghijklmnopqrtuvwxyz0123456789", 24))
+
+    return render_template("index.html.jinja", job_id=job_id)
+
+def remove_file_warn(path: str):
+    try:
+        os.remove(path)
+    except Exception as ex:
+        print(f"WARNING: Could not remove file {path}:", ex, flush=True)
+
+@app.route("/process", methods=["POST"])
+def process_image():
+    if "file" in request.files and "job_id" in request.form and len(request.form["job_id"]) != 0:
+        f = request.files["file"]
+        job_id = secure_filename(request.form['job_id'])
+        upload_path = os.path.join(UPLOAD_PATH, job_id)
+
+        f.save(upload_path)
+        try:
+            os.chown(upload_path, UID_OWN, GID_EXTRACTOR)
+
+            if (globe_path := globe(job_id, upload_path)) and validate_globe(globe_path):
+                static_path = os.path.join(RESULTS_PATH, f"{job_id}.webp")
+                os.rename(globe_path, static_path)
+                return redirect(f"/result/{job_id}")
+            else:
+                flash("Image could not be packaged into a snow globe!")
+        except Exception as ex:
+            print(ex, flush=True)
+        finally:
+            remove_file_warn(upload_path)
+            for el in os.listdir(INTERMEDIATE_PATH):
+                if el.startswith(job_id):
+                    remove_file_warn(os.path.join(INTERMEDIATE_PATH, el))
+
+    else:
+        flash("No file has been uploaded!", category="error")
+
+    return render_template("result.html.jinja")
+
+@app.route("/result/<string:job>")
+def show_result(job: str):
+    job = secure_filename(f"{job}.webp")
+    img_job = None
+
+    if os.path.exists(static_path("results/" + job)):
+        img_job = job
+    else:
+        flash("Sorry, this snow globe does not exist!")
+
+    return render_template("result.html.jinja", img_job=img_job)
+
+serve(app, host='0.0.0.0', port=1337)
